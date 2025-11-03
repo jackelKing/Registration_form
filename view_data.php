@@ -1,36 +1,37 @@
 <?php
-
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 try {
     $db = new PDO('sqlite:' . __DIR__ . '/registrations.db');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     $rows = $db->query("SELECT id, name, email, age, created_at FROM users ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     die("Database error: " . htmlspecialchars($e->getMessage()));
 }
+
+$logfile = __DIR__ . '/data.txt';
+$logData = file_exists($logfile) ? file_get_contents($logfile) : "No data.txt file found yet.";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registered Users</title>
+    <title>All Registered Users</title>
     <style>
         body {
+            background-color: #111;
+            color: #eee;
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
             text-align: center;
             margin: 30px;
         }
         table {
             border-collapse: collapse;
-            width: 80%;
-            margin: 0 auto;
+            width: 85%;
+            margin: 20px auto;
             background-color: #222;
-            box-shadow: 0 0 10px 2px #444;
+            box-shadow: 0 0 10px #444;
         }
         th, td {
             padding: 10px;
@@ -38,6 +39,15 @@ try {
         }
         th {
             background-color: #333;
+        }
+        pre {
+            text-align: left;
+            background-color: #000;
+            padding: 10px;
+            width: 85%;
+            margin: 20px auto;
+            border-radius: 5px;
+            overflow-x: auto;
         }
         a {
             color: #f0c674;
@@ -50,15 +60,12 @@ try {
     </style>
 </head>
 <body>
-    <h2>📋 Registered Users</h2>
-
+    <h2>📋 Registered Users (Database)</h2>
     <?php if (count($rows) === 0): ?>
-        <p>No registrations yet.</p>
+        <p>No users yet.</p>
     <?php else: ?>
         <table>
-            <tr>
-                <th>ID</th><th>Name</th><th>Email</th><th>Age</th><th>Registered On</th>
-            </tr>
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>Age</th><th>Registered On</th></tr>
             <?php foreach ($rows as $r): ?>
                 <tr>
                     <td><?= htmlspecialchars($r['id']) ?></td>
@@ -71,6 +78,9 @@ try {
         </table>
     <?php endif; ?>
 
-    <p style="margin-top: 20px;"><a href="index.html">← Go Back</a></p>
+    <h2>📄 data.txt Log</h2>
+    <pre><?= htmlspecialchars($logData) ?></pre>
+
+    <p><a href="index.html">← Back to Form</a></p>
 </body>
 </html>
