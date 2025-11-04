@@ -107,9 +107,17 @@
                 let password = $("#password").val().trim();
                 let age = $("#age").val().trim();
 
+                let gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
                 if (!name || !email || !password || !age) {
                     e.preventDefault();
                     alert("⚠️ Please fill in all fields before submitting.");
+                    return false;
+                }
+
+                if (!gmailPattern.test(email)) {
+                    e.preventDefault();
+                    alert("⚠️ Please enter a valid Gmail address (example@gmail.com).");
                     return false;
                 }
 
@@ -119,11 +127,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
