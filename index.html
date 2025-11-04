@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
+    <title>Registration Form (with jQuery)</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
         body {
             display: flex;
@@ -25,6 +28,7 @@
             padding: 20px;
             box-shadow: 0 0 10px 5px whitesmoke;
             display: none; /* hidden initially */
+            border-radius: 10px;
         }
 
         h2 {
@@ -58,10 +62,15 @@
         button:hover {
             background-color: #f0c674;
         }
+
+        p {
+            text-align: center;
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
-    <p>This is a very basic registration form that stores the details of the entries in a separate file.</p>
+    <p>This is a basic registration form that stores the details in a file.</p>
     <p>Click below to continue.</p>
     <button type="button" id="startBtn">Click here to start</button>
 
@@ -85,28 +94,36 @@
     </div>
 
     <script>
-        // JavaScript to toggle form visibility
-        const startBtn = document.getElementById('startBtn');
-        const formContent = document.getElementById('form_content');
+        $(document).ready(function() {
+            $("#startBtn").click(function() {
+                $(this).fadeOut(400, function() {
+                    $("#form_content").fadeIn(600);
+                });
+            });
 
-        startBtn.addEventListener('click', () => {
-            startBtn.style.display = 'none';
-            formContent.style.display = 'block';
-        });
+            $("#registerForm").on("submit", function(e) {
+                let name = $("#name").val().trim();
+                let email = $("#email").val().trim();
+                let password = $("#password").val().trim();
+                let age = $("#age").val().trim();
 
-        // Optional: simple form validation before submitting
-        const form = document.getElementById('registerForm');
-        form.addEventListener('submit', (e) => {
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const age = document.getElementById('age').value.trim();
+                if (!name || !email || !password || !age) {
+                    e.preventDefault();
+                    alert("⚠️ Please fill in all fields before submitting.");
+                    return false;
+                }
 
-            if (!name || !email || !password || !age) {
-                e.preventDefault();
-                alert('Please fill in all fields.');
-            }
+                alert("✅ Form submitted successfully!");
+            });
         });
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
